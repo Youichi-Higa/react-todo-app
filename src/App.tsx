@@ -1,22 +1,18 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { InputField, ListField } from 'src/components';
-import type { Todo } from 'src/types';
+import type { InputtedTodo, Todo } from 'src/types';
 
 function App() {
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
+  const [inputtedTodo, setInputtedTodo] = useState<InputtedTodo>({ title: '', content: '' });
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const completedList = todoList.filter((todo) => todo.isCompleted);
   const uncompletedList = todoList.filter((todo) => !todo.isCompleted);
   console.log('completedList', completedList);
   console.log('uncompletedList', uncompletedList);
 
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-  };
-  const handleChangeContent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setContent(e.target.value);
+  const handleChangeInputtedTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputtedTodo({ ...inputtedTodo, [e.target.name]: e.target.value });
   };
 
   // 保存ボタンを押したときの処理
@@ -25,8 +21,8 @@ function App() {
     const id = todoList.length === 0 ? 1 : todoList[todoList.length - 1].id + 1;
     const newTodo = {
       id,
-      title,
-      content,
+      title: inputtedTodo.title,
+      content: inputtedTodo.content,
       isCompleted: true,
       createdAt: new Date(),
       updatedAt: null,
@@ -34,9 +30,10 @@ function App() {
     const newTodoList = [...todoList, newTodo];
     localStorage.setItem('todo-list', JSON.stringify(newTodoList));
     setTodoList(newTodoList);
+    setInputtedTodo({ title: '', content: '' });
   };
 
-  // 初回レンダリング時にローカルストレージからデータを取得
+  // 初回レンダリング時にローカルストレージからデータ取得
   useEffect(() => {
     const localStorageData = localStorage.getItem('todo-list');
     if (localStorageData) {
@@ -47,12 +44,11 @@ function App() {
   return (
     <div className="App">
       <InputField
-        handleChangeTitle={handleChangeTitle}
-        handleChangeContent={handleChangeContent}
+        handleChangeInputtedTodo={handleChangeInputtedTodo}
         handleSave={handleSave}
       />
-      <ListField title={"完了"} todoList={uncompletedList} />
-      <ListField title={"未完了"} todoList={completedList} />
+      <ListField title={'完了'} todoList={uncompletedList} />
+      <ListField title={'未完了'} todoList={completedList} />
     </div>
   );
 }

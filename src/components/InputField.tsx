@@ -3,13 +3,12 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
 type Props = {
-  handleChangeTitle: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeContent: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeInputtedTodo: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSave: () => void;
 };
 
 export const InputField = (props: Props) => {
-  const { handleChangeTitle, handleChangeContent, handleSave } = props;
+  const { handleChangeInputtedTodo, handleSave } = props;
 
   return (
     <Box
@@ -26,23 +25,25 @@ export const InputField = (props: Props) => {
       <div style={{ marginBottom: '16px' }}>
         <TextField
           id="title"
+          name="title"
           label="件名"
           variant="outlined"
           multiline
           maxRows={4}
           sx={{ width: '100%' }}
-          onChange={handleChangeTitle}
+          onChange={handleChangeInputtedTodo}
         />
       </div>
       <div style={{ marginBottom: '16px' }}>
         <TextField
-          id="title"
+          id="content"
+          name="content"
           label="内容"
           variant="outlined"
           multiline
           maxRows={4}
           sx={{ width: '100%' }}
-          onChange={handleChangeContent}
+          onChange={handleChangeInputtedTodo}
         />
       </div>
       <Button variant="contained" onClick={handleSave}>
