@@ -1,14 +1,16 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import type { InputtedTodo } from 'src/types';
 
 type Props = {
-  handleChangeInputtedTodo: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputtedTodo: InputtedTodo;
+  handleInputtedTodoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSave: () => void;
 };
 
 export const InputField = (props: Props) => {
-  const { handleChangeInputtedTodo, handleSave } = props;
+  const { inputtedTodo, handleInputtedTodoChange, handleSave } = props;
 
   return (
     <Box
@@ -31,7 +33,8 @@ export const InputField = (props: Props) => {
           multiline
           maxRows={4}
           sx={{ width: '100%' }}
-          onChange={handleChangeInputtedTodo}
+          value={inputtedTodo.title}
+          onChange={handleInputtedTodoChange}
         />
       </div>
       <div style={{ marginBottom: '16px' }}>
@@ -43,12 +46,13 @@ export const InputField = (props: Props) => {
           multiline
           maxRows={4}
           sx={{ width: '100%' }}
-          onChange={handleChangeInputtedTodo}
+          value={inputtedTodo.content}
+          onChange={handleInputtedTodoChange}
         />
       </div>
       <Button variant="contained" onClick={handleSave}>
         保存
-      </Button>{' '}
+      </Button>
     </Box>
   );
 };

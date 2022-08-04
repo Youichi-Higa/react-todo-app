@@ -1,15 +1,14 @@
-import { Grid } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { Box, Button, Checkbox, Grid } from '@mui/material';
 import type { Todo } from 'src/types';
 
 type Props = {
   title: string;
   todoList: Todo[];
+  handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>, todoId: number) => void;
 };
 
 export const ListField = (props: Props) => {
-  const { title, todoList } = props;
+  const { title, todoList, handleCheckboxChange } = props;
 
   return (
     <Box
@@ -25,7 +24,14 @@ export const ListField = (props: Props) => {
       <p>{title}</p>
       {todoList.map((todo) => (
         <Grid key={todo.id} container spacing={2}>
-          <Grid item xs={4}>
+          <Grid item xs={1}>
+            <Checkbox
+              checked={todo.isCompleted}
+              onChange={(e) => handleCheckboxChange(e, todo.id)}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+          </Grid>
+          <Grid item xs={3}>
             <div>{todo.title}</div>
           </Grid>
           <Grid item xs={8}>
@@ -33,7 +39,6 @@ export const ListField = (props: Props) => {
           </Grid>
         </Grid>
       ))}
-      <Button variant="contained">保存</Button>
     </Box>
   );
 };

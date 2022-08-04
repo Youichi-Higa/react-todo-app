@@ -6,13 +6,34 @@ import type { InputtedTodo, Todo } from 'src/types';
 function App() {
   const [inputtedTodo, setInputtedTodo] = useState<InputtedTodo>({ title: '', content: '' });
   const [todoList, setTodoList] = useState<Todo[]>([]);
-  const completedList = todoList.filter((todo) => todo.isCompleted);
   const uncompletedList = todoList.filter((todo) => !todo.isCompleted);
-  console.log('completedList', completedList);
-  console.log('uncompletedList', uncompletedList);
+  const completedList = todoList.filter((todo) => todo.isCompleted);
 
-  const handleChangeInputtedTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // 日付を降順にする関数
+  const sortDescendingDate = (_todoList: Todo[]) => {
+    _todoList.sort((a, b) => {
+      const aDate = a.updatedAt === null ? a.createdAt : a.updatedAt;
+      const bDate = b.updatedAt === null ? b.createdAt : b.updatedAt;
+      if (aDate < bDate) return 1;
+      if (aDate > bDate) return -1;
+      return 0;
+    });
+    return _todoList;
+  };
+  const descUncompletedList = sortDescendingDate(uncompletedList);
+  const descCompletedList = sortDescendingDate(completedList);
+
+  const handleInputtedTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputtedTodo({ ...inputtedTodo, [e.target.name]: e.target.value });
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, todoId: number) => {
+    const newTodoList = [...todoList];
+    const index = newTodoList.findIndex((todo) => todo.id === todoId);
+    newTodoList[index].isCompleted = e.target.checked;
+    newTodoList[index].updatedAt = new Date().toISOString();
+    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
+    setTodoList(newTodoList);
   };
 
   // 保存ボタンを押したときの処理
@@ -23,8 +44,8 @@ function App() {
       id,
       title: inputtedTodo.title,
       content: inputtedTodo.content,
-      isCompleted: true,
-      createdAt: new Date(),
+      isCompleted: false,
+      createdAt: new Date().toISOString(),
       updatedAt: null,
     };
     const newTodoList = [...todoList, newTodo];
@@ -44,11 +65,20 @@ function App() {
   return (
     <div className="App">
       <InputField
-        handleChangeInputtedTodo={handleChangeInputtedTodo}
+        inputtedTodo={inputtedTodo}
+        handleInputtedTodoChange={handleInputtedTodoChange}
         handleSave={handleSave}
       />
-      <ListField title={'完了'} todoList={uncompletedList} />
-      <ListField title={'未完了'} todoList={completedList} />
+      <ListField
+        title={'未完了'}
+        todoList={descUncompletedList}
+        handleCheckboxChange={handleCheckboxChange}
+      />
+      <ListField
+        title={'完了'}
+        todoList={descCompletedList}
+        handleCheckboxChange={handleCheckboxChange}
+      />
     </div>
   );
 }
