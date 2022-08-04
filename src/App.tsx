@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { InputField, ListField } from 'src/components';
-import type { InputtedTodo, Todo } from 'src/types';
+import { FilterField, InputField, ListField } from 'src/components';
+import type { FilterValue, InputtedTodo, Todo } from 'src/types';
 
 function App() {
   const [inputtedTodo, setInputtedTodo] = useState<InputtedTodo>({ title: '', content: '' });
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const uncompletedList = todoList.filter((todo) => !todo.isCompleted);
   const completedList = todoList.filter((todo) => todo.isCompleted);
+  const [filterValue, setFilterValue] = useState<FilterValue>('all');
 
   // 日付を降順にする関数
   const sortDescendingDate = (_todoList: Todo[]) => {
@@ -38,6 +39,8 @@ function App() {
 
   // 保存ボタンを押したときの処理
   const handleSave = () => {
+    // TODO バリデーション
+    if (inputtedTodo.title === '') return;
     // ユニークIDを生成
     const id = todoList.length === 0 ? 1 : todoList[todoList.length - 1].id + 1;
     const newTodo = {
@@ -69,16 +72,21 @@ function App() {
         handleInputtedTodoChange={handleInputtedTodoChange}
         handleSave={handleSave}
       />
-      <ListField
-        title={'未完了'}
-        todoList={descUncompletedList}
-        handleCheckboxChange={handleCheckboxChange}
-      />
-      <ListField
-        title={'完了'}
-        todoList={descCompletedList}
-        handleCheckboxChange={handleCheckboxChange}
-      />
+      <FilterField setFilterValue={setFilterValue} />
+      {filterValue !== 'completed' && (
+        <ListField
+          title={'未完了'}
+          todoList={descUncompletedList}
+          handleCheckboxChange={handleCheckboxChange}
+        />
+      )}
+      {filterValue !== 'uncompleted' && (
+        <ListField
+          title={'完了'}
+          todoList={descCompletedList}
+          handleCheckboxChange={handleCheckboxChange}
+        />
+      )}
     </div>
   );
 }
