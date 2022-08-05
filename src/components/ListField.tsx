@@ -1,14 +1,16 @@
-import { Box, Button, Checkbox, Grid } from '@mui/material';
+import { Box, Checkbox, Grid } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import type { Todo } from 'src/types';
 
 type Props = {
   title: string;
   todoList: Todo[];
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>, todoId: number) => void;
+  handleDelete: (todoId: number) => void;
 };
 
 export const ListField = (props: Props) => {
-  const { title, todoList, handleCheckboxChange } = props;
+  const { title, todoList, handleCheckboxChange, handleDelete } = props;
 
   return (
     <Box
@@ -34,8 +36,15 @@ export const ListField = (props: Props) => {
           <Grid item xs={3}>
             <div>{todo.title}</div>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <div>{todo.content}</div>
+          </Grid>
+          <Grid item xs={1}>
+            <DeleteIcon
+              sx={{ cursor: 'pointer' }}
+              color="disabled"
+              onClick={() => handleDelete(todo.id)}
+            />
           </Grid>
         </Grid>
       ))}

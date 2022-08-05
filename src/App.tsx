@@ -37,7 +37,6 @@ function App() {
     setTodoList(newTodoList);
   };
 
-  // 保存ボタンを押したときの処理
   const handleSave = () => {
     // TODO バリデーション
     if (inputtedTodo.title === '') return;
@@ -56,6 +55,12 @@ function App() {
     setTodoList(newTodoList);
     setInputtedTodo({ title: '', content: '' });
   };
+
+  const handleDelete = (todoId: number) => {
+    const newTodoList = todoList.filter((todo) => todo.id !== todoId);
+    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
+    setTodoList(newTodoList);
+  }
 
   // 初回レンダリング時にローカルストレージからデータ取得
   useEffect(() => {
@@ -78,6 +83,7 @@ function App() {
           title={'未完了'}
           todoList={descUncompletedList}
           handleCheckboxChange={handleCheckboxChange}
+          handleDelete={handleDelete}
         />
       )}
       {filterValue !== 'uncompleted' && (
@@ -85,6 +91,7 @@ function App() {
           title={'完了'}
           todoList={descCompletedList}
           handleCheckboxChange={handleCheckboxChange}
+          handleDelete={handleDelete}
         />
       )}
     </div>
