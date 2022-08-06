@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { DeleteModal, EditModal, FilterField, InputField, ListField } from 'src/components';
-import type { FilterValue, InputtedTodo, SelectedTodo, Todo } from 'src/types';
+import type { FilterValue, SelectedTodo, Todo } from 'src/types';
 
 function App() {
-  const defaultValues = { title: '', content: '' };
-  const [inputtedTodo, setInputtedTodo] = useState<InputtedTodo>(defaultValues);
-  const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>({ id: null, ...defaultValues });
+  const defaultValues = { id: null, title: '', content: '' };
+  const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>(defaultValues);
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const uncompletedList = todoList.filter((todo) => !todo.isCompleted);
   const completedList = todoList.filter((todo) => todo.isCompleted);
@@ -28,9 +27,6 @@ function App() {
   const descCompletedList = sortDescendingDate(completedList);
 
   // 入力値と編集値の変更を制御
-  const handleInputtedTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputtedTodo({ ...inputtedTodo, [e.target.name]: e.target.value });
-  };
   const handleSelectedTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedTodo({ ...selectedTodo, [e.target.name]: e.target.value });
   };
@@ -43,26 +39,6 @@ function App() {
     newTodoList[index].updatedAt = new Date().toISOString();
     localStorage.setItem('todo-list', JSON.stringify(newTodoList));
     setTodoList(newTodoList);
-  };
-
-  // 入力値の保存
-  const handleSave = () => {
-    // TODO バリデーション
-    if (inputtedTodo.title === '') return;
-    // ユニークIDを生成
-    const id = todoList.length === 0 ? 1 : todoList[todoList.length - 1].id + 1;
-    const newTodo = {
-      id,
-      title: inputtedTodo.title,
-      content: inputtedTodo.content,
-      isCompleted: false,
-      createdAt: new Date().toISOString(),
-      updatedAt: null,
-    };
-    const newTodoList = [...todoList, newTodo];
-    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
-    setTodoList(newTodoList);
-    setInputtedTodo(defaultValues);
   };
 
   // 編集モーダルの制御
@@ -113,11 +89,7 @@ function App() {
 
   return (
     <>
-      <InputField
-        inputtedTodo={inputtedTodo}
-        handleInputtedTodoChange={handleInputtedTodoChange}
-        handleSave={handleSave}
-      />
+      <InputField todoList={todoList} setTodoList={setTodoList} />
       <FilterField filterValue={filterValue} setFilterValue={setFilterValue} />
       {filterValue !== 'completed' && (
         <ListField
