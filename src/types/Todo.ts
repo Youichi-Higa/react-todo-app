@@ -9,4 +9,4 @@ export type Todo = {
 
 export type FormTodo = Pick<Todo, 'title' | 'content'>;
 
-export type SelectedTodo = { id: number | null } & FormTodo;
+export type SelectedTodo = { id: number | undefined } & FormTodo;

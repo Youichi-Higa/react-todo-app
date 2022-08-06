@@ -1,16 +1,23 @@
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { DeleteModal, EditModal, FilterField, InputField, ListField } from 'src/components';
 import type { FilterValue, SelectedTodo, Todo } from 'src/types';
 
 function App() {
-  const defaultValues = { id: null, title: '', content: '' };
-  const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>(defaultValues);
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const uncompletedList = todoList.filter((todo) => !todo.isCompleted);
   const completedList = todoList.filter((todo) => todo.isCompleted);
+  const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>({
+    id: undefined,
+    title: '',
+    content: '',
+  });
   const [filterValue, setFilterValue] = useState<FilterValue>('all');
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+
+  const useFormReturn = useForm<SelectedTodo>();
+  const { setValue } = useFormReturn;
 
   // 日付を降順にする関数
   const sortDescendingDate = (_todoList: Todo[]) => {
@@ -26,11 +33,6 @@ function App() {
   const descUncompletedList = sortDescendingDate(uncompletedList);
   const descCompletedList = sortDescendingDate(completedList);
 
-  // 入力値と編集値の変更を制御
-  const handleSelectedTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedTodo({ ...selectedTodo, [e.target.name]: e.target.value });
-  };
-
   // チェックボックスの変更を制御
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, todoId: number) => {
     const newTodoList = [...todoList];
@@ -44,21 +46,12 @@ function App() {
   // 編集モーダルの制御
   const handleEditModalOpen = (_selectedTodo: SelectedTodo) => {
     setSelectedTodo(_selectedTodo);
+    setValue('id', _selectedTodo.id);
+    setValue('title', _selectedTodo.title);
+    setValue('content', _selectedTodo.content);
     setEditModalOpen(true);
   };
   const handleEditModalClose = () => {
-    setEditModalOpen(false);
-  };
-
-  // 更新
-  const handleUpdate = () => {
-    const newTodoList = [...todoList];
-    const index = newTodoList.findIndex((todo) => todo.id === selectedTodo.id);
-    newTodoList[index].title = selectedTodo.title;
-    newTodoList[index].content = selectedTodo.content;
-    newTodoList[index].updatedAt = new Date().toISOString();
-    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
-    setTodoList(newTodoList);
     setEditModalOpen(false);
   };
 
@@ -112,11 +105,11 @@ function App() {
 
       {/* モーダル */}
       <EditModal
-        selectedTodo={selectedTodo}
-        handleSelectedTodoChange={handleSelectedTodoChange}
+        todoList={todoList}
+        setTodoList={setTodoList}
         editModalOpen={editModalOpen}
         handleEditModalClose={handleEditModalClose}
-        handleUpdate={handleUpdate}
+        useFormReturn={useFormReturn}
       />
       <DeleteModal
         selectedTodo={selectedTodo}

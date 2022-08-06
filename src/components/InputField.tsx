@@ -49,7 +49,6 @@ export const InputField: React.FC<Props> = (props: Props) => {
       <Controller
         name="title"
         control={control}
-        defaultValue=""
         render={({ field }) => (
           <Box sx={{ mb: 3 }}>
             <TextField
@@ -67,7 +66,6 @@ export const InputField: React.FC<Props> = (props: Props) => {
       <Controller
         name="content"
         control={control}
-        defaultValue=""
         render={({ field }) => (
           <Box sx={{ mb: 3 }}>
             <TextField

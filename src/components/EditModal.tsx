@@ -1,22 +1,39 @@
+import { Dispatch, SetStateAction } from 'react';
+import { Controller, SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import type { SelectedTodo } from 'src/types';
+import type { SelectedTodo, Todo } from 'src/types';
 
 type Props = {
-  selectedTodo: SelectedTodo;
-  handleSelectedTodoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  todoList: Todo[];
+  setTodoList: Dispatch<SetStateAction<Todo[]>>;
   editModalOpen: boolean;
   handleEditModalClose: () => void;
-  handleUpdate: () => void;
+  useFormReturn: UseFormReturn<SelectedTodo>;
 };
 
 export const EditModal: React.FC<Props> = (props: Props) => {
   const {
-    selectedTodo,
-    handleSelectedTodoChange,
+    todoList,
+    setTodoList,
     editModalOpen,
     handleEditModalClose,
-    handleUpdate,
+    useFormReturn,
   } = props;
+
+  const { control, handleSubmit, reset } = useFormReturn;
+
+  const onSubmit: SubmitHandler<SelectedTodo> = (data) => {
+    const newTodoList = [...todoList];
+    const index = newTodoList.findIndex((todo) => todo.id === data.id);
+    newTodoList[index].title = data.title;
+    newTodoList[index].content = data.content;
+    newTodoList[index].updatedAt = new Date().toISOString();
+    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
+    setTodoList(newTodoList);
+    handleEditModalClose();
+    reset();
+  };
+
   return (
     <Box>
       <Modal
@@ -26,6 +43,8 @@ export const EditModal: React.FC<Props> = (props: Props) => {
         aria-describedby="modal-modal-description"
       >
         <Box
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
           sx={{
             position: 'absolute' as 'absolute',
             top: '50%',
@@ -50,33 +69,40 @@ export const EditModal: React.FC<Props> = (props: Props) => {
               編集
             </Typography>
           </Box>
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              id="title"
-              name="title"
-              label="件名"
-              variant="outlined"
-              required
-              multiline
-              maxRows={4}
-              sx={{ width: '100%' }}
-              value={selectedTodo.title}
-              onChange={handleSelectedTodoChange}
-            />
-          </Box>
-          <Box sx={{ mb: 5 }}>
-            <TextField
-              id="content"
-              name="content"
-              label="内容"
-              variant="outlined"
-              multiline
-              maxRows={4}
-              sx={{ width: '100%' }}
-              value={selectedTodo.content}
-              onChange={handleSelectedTodoChange}
-            />
-          </Box>
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Box sx={{ mb: 3 }}>
+                <TextField
+                  label="件名"
+                  variant="outlined"
+                  required
+                  multiline
+                  maxRows={4}
+                  sx={{ width: '100%' }}
+                  {...field}
+                />
+              </Box>
+            )}
+          />
+          <Controller
+            name="content"
+            control={control}
+            render={({ field }) => (
+              <Box sx={{ mb: 5 }}>
+                <TextField
+                  label="内容"
+                  variant="outlined"
+                  multiline
+                  maxRows={4}
+                  sx={{ width: '100%' }}
+                  {...field}
+                />
+              </Box>
+            )}
+          />
+          <input type="hidden" name="id" />
           <Button
             sx={{
               width: 110,
@@ -92,7 +118,7 @@ export const EditModal: React.FC<Props> = (props: Props) => {
           >
             キャンセル
           </Button>
-          <Button sx={{ width: 110 }} variant="contained" onClick={handleUpdate}>
+          <Button type="submit" sx={{ width: 110 }} variant="contained">
             更新
           </Button>
         </Box>
