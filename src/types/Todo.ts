@@ -6,3 +6,7 @@ export type Todo = {
   createdAt: string;
   updatedAt: string | null;
 };
+
+export type InputtedTodo = Pick<Todo, 'title' | 'content'>;
+
+export type SelectedTodo = { id: number | null } & InputtedTodo;

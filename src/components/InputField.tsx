@@ -1,5 +1,4 @@
 import { Box, Button, TextField } from '@mui/material';
-
 import type { InputtedTodo } from 'src/types';
 
 type Props = {
