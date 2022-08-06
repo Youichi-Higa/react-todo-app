@@ -7,12 +7,13 @@ type Props = {
   title: string;
   todoList: Todo[];
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>, todoId: number) => void;
-  handleEdit: (selectedTodo: SelectedTodo) => void;
-  handleDelete: (todoId: number) => void;
+  handleEditModalOpen: (selectedTodo: SelectedTodo) => void;
+  handleDeleteModalOpen: (selectedTodo: SelectedTodo) => void;
 };
 
 export const ListField = (props: Props) => {
-  const { title, todoList, handleCheckboxChange, handleEdit, handleDelete } = props;
+  const { title, todoList, handleCheckboxChange, handleEditModalOpen, handleDeleteModalOpen } =
+    props;
 
   return (
     <Box
@@ -46,20 +47,24 @@ export const ListField = (props: Props) => {
             />
           </Grid>
           <Grid item xs={3}>
-            <div>{todo.title}</div>
+            <Box>{todo.title}</Box>
           </Grid>
           <Grid item xs={6}>
-            <div>{todo.content}</div>
+            <Box>{todo.content}</Box>
           </Grid>
           <Grid item xs={2}>
             <EditIcon
               sx={{ cursor: 'pointer' }}
-              onClick={() => handleEdit({ id: todo.id, title: todo.title, content: todo.content })}
+              onClick={() =>
+                handleEditModalOpen({ id: todo.id, title: todo.title, content: todo.content })
+              }
             />
             <DeleteIcon
               sx={{ cursor: 'pointer' }}
               color="disabled"
-              onClick={() => handleDelete(todo.id)}
+              onClick={() =>
+                handleDeleteModalOpen({ id: todo.id, title: todo.title, content: todo.content })
+              }
             />
           </Grid>
         </Grid>

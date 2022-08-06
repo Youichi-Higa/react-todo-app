@@ -3,25 +3,18 @@ import type { SelectedTodo } from 'src/types';
 
 type Props = {
   selectedTodo: SelectedTodo;
-  handleSelectedTodoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  editModalOpen: boolean;
-  handleEditModalClose: () => void;
-  handleUpdate: () => void;
+  deleteModalOpen: boolean;
+  handleDeleteModalClose: () => void;
+  handleDelete: () => void;
 };
 
-export const EditModal: React.FC<Props> = (props: Props) => {
-  const {
-    selectedTodo,
-    handleSelectedTodoChange,
-    editModalOpen,
-    handleEditModalClose,
-    handleUpdate,
-  } = props;
+export const DeleteModal: React.FC<Props> = (props: Props) => {
+  const { selectedTodo, deleteModalOpen, handleDeleteModalClose, handleDelete } = props;
   return (
-    <Box>
+    <div>
       <Modal
-        open={editModalOpen}
-        onClose={handleEditModalClose}
+        open={deleteModalOpen}
+        onClose={handleDeleteModalClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -47,7 +40,7 @@ export const EditModal: React.FC<Props> = (props: Props) => {
             }}
           >
             <Typography variant="h5" component="h1">
-              編集
+              削除
             </Typography>
           </Box>
           <Box sx={{ mb: 3 }}>
@@ -56,12 +49,12 @@ export const EditModal: React.FC<Props> = (props: Props) => {
               name="title"
               label="件名"
               variant="outlined"
+              disabled
               required
               multiline
               maxRows={4}
               sx={{ width: '100%' }}
               value={selectedTodo.title}
-              onChange={handleSelectedTodoChange}
             />
           </Box>
           <Box sx={{ mb: 5 }}>
@@ -70,12 +63,23 @@ export const EditModal: React.FC<Props> = (props: Props) => {
               name="content"
               label="内容"
               variant="outlined"
+              disabled
               multiline
               maxRows={4}
               sx={{ width: '100%' }}
               value={selectedTodo.content}
-              onChange={handleSelectedTodoChange}
             />
+          </Box>
+          <Box
+            sx={{
+              mb: 3,
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography variant="body1" component="p">
+              本当に削除しますか？
+            </Typography>
           </Box>
           <Button
             sx={{
@@ -88,15 +92,15 @@ export const EditModal: React.FC<Props> = (props: Props) => {
             }}
             variant="contained"
             disableElevation
-            onClick={handleEditModalClose}
+            onClick={handleDeleteModalClose}
           >
             キャンセル
           </Button>
-          <Button sx={{ width: 110 }} variant="contained" onClick={handleUpdate}>
-            更新
+          <Button sx={{ width: 110 }} variant="contained" color="error" onClick={handleDelete}>
+            削除
           </Button>
         </Box>
       </Modal>
-    </Box>
+    </div>
   );
 };

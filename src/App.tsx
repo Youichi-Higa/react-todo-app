@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { EditModal, FilterField, InputField, ListField } from 'src/components';
+import { DeleteModal, EditModal, FilterField, InputField, ListField } from 'src/components';
 import type { FilterValue, InputtedTodo, SelectedTodo, Todo } from 'src/types';
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
   const completedList = todoList.filter((todo) => todo.isCompleted);
   const [filterValue, setFilterValue] = useState<FilterValue>('all');
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   // 日付を降順にする関数
   const sortDescendingDate = (_todoList: Todo[]) => {
@@ -65,7 +66,7 @@ function App() {
   };
 
   // 編集モーダルの制御
-  const handleEdit = (_selectedTodo: SelectedTodo) => {
+  const handleEditModalOpen = (_selectedTodo: SelectedTodo) => {
     setSelectedTodo(_selectedTodo);
     setEditModalOpen(true);
   };
@@ -85,11 +86,21 @@ function App() {
     setEditModalOpen(false);
   };
 
+  // 削除モーダルの制御
+  const handleDeleteModalOpen = (_selectedTodo: SelectedTodo) => {
+    setSelectedTodo(_selectedTodo);
+    setDeleteModalOpen(true);
+  };
+  const handleDeleteModalClose = () => {
+    setDeleteModalOpen(false);
+  };
+
   // 削除
-  const handleDelete = (todoId: number) => {
-    const newTodoList = todoList.filter((todo) => todo.id !== todoId);
+  const handleDelete = () => {
+    const newTodoList = todoList.filter((todo) => todo.id !== selectedTodo.id);
     localStorage.setItem('todo-list', JSON.stringify(newTodoList));
     setTodoList(newTodoList);
+    setDeleteModalOpen(false);
   };
 
   // 初回レンダリング時にローカルストレージからデータ取得
@@ -113,8 +124,8 @@ function App() {
           title={'未完了'}
           todoList={descUncompletedList}
           handleCheckboxChange={handleCheckboxChange}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
+          handleEditModalOpen={handleEditModalOpen}
+          handleDeleteModalOpen={handleDeleteModalOpen}
         />
       )}
       {filterValue !== 'uncompleted' && (
@@ -122,17 +133,24 @@ function App() {
           title={'完了'}
           todoList={descCompletedList}
           handleCheckboxChange={handleCheckboxChange}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
+          handleEditModalOpen={handleEditModalOpen}
+          handleDeleteModalOpen={handleDeleteModalOpen}
         />
       )}
 
+      {/* モーダル */}
       <EditModal
         selectedTodo={selectedTodo}
         handleSelectedTodoChange={handleSelectedTodoChange}
         editModalOpen={editModalOpen}
         handleEditModalClose={handleEditModalClose}
         handleUpdate={handleUpdate}
+      />
+      <DeleteModal
+        selectedTodo={selectedTodo}
+        deleteModalOpen={deleteModalOpen}
+        handleDeleteModalClose={handleDeleteModalClose}
+        handleDelete={handleDelete}
       />
     </>
   );
