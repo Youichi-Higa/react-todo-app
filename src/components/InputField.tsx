@@ -18,9 +18,10 @@ export const InputField: React.FC<Props> = (props: Props) => {
         width: '700px',
         mx: 'auto',
         my: 4,
-        padding: 3,
+        p: 3,
         boxShadow: 3,
         borderRadius: 1,
+        textAlign: 'center',
       }}
     >
       <div style={{ marginBottom: '16px' }}>

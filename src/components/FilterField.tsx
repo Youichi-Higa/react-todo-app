@@ -1,35 +1,26 @@
 import { Dispatch, SetStateAction } from 'react';
-import Box from '@mui/material/Box';
+import { Box, Tab, Tabs } from '@mui/material';
 import type { FilterValue } from 'src/types';
 
 type Props = {
+  filterValue: FilterValue;
   setFilterValue: Dispatch<SetStateAction<FilterValue>>;
 };
 
 export const FilterField = (props: Props) => {
-  const { setFilterValue } = props;
+  const { filterValue, setFilterValue } = props;
+
+  const handleChange = (event: React.SyntheticEvent, newValue: FilterValue) => {
+    setFilterValue(newValue);
+  };
+
   return (
-    <Box
-      component="form"
-      sx={{
-        width: '700px',
-        mx: 'auto',
-        my: 4,
-        padding: 3,
-        boxShadow: 3,
-        borderRadius: 1,
-        display: 'flex',
-      }}
-    >
-      <div onClick={() => setFilterValue('all')} style={{ marginLeft: '16px' }}>
-        全て
-      </div>
-      <div onClick={() => setFilterValue('uncompleted')} style={{ marginLeft: '16px' }}>
-        未完了
-      </div>
-      <div onClick={() => setFilterValue('completed')} style={{ marginLeft: '16px' }}>
-        完了
-      </div>
+    <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
+      <Tabs value={filterValue} onChange={handleChange} centered>
+        <Tab label="全て" value="all" />
+        <Tab label="未完了" value="uncompleted" />
+        <Tab label="完了" value="completed" />
+      </Tabs>
     </Box>
   );
 };

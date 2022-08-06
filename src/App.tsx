@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import './App.css';
 import { EditModal, FilterField, InputField, ListField } from 'src/components';
 import type { FilterValue, InputtedTodo, SelectedTodo, Todo } from 'src/types';
 
@@ -102,13 +101,13 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <>
       <InputField
         inputtedTodo={inputtedTodo}
         handleInputtedTodoChange={handleInputtedTodoChange}
         handleSave={handleSave}
       />
-      <FilterField setFilterValue={setFilterValue} />
+      <FilterField filterValue={filterValue} setFilterValue={setFilterValue} />
       {filterValue !== 'completed' && (
         <ListField
           title={'未完了'}
@@ -135,7 +134,7 @@ function App() {
         handleEditModalClose={handleEditModalClose}
         handleUpdate={handleUpdate}
       />
-    </div>
+    </>
   );
 }
 

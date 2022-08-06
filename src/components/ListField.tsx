@@ -1,4 +1,4 @@
-import { Box, Checkbox, Grid } from '@mui/material';
+import { Box, Checkbox, Grid, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import type { SelectedTodo, Todo } from 'src/types';
@@ -20,12 +20,22 @@ export const ListField = (props: Props) => {
         width: '700px',
         mx: 'auto',
         my: 4,
-        padding: 3,
+        p: 3,
         boxShadow: 3,
         borderRadius: 1,
       }}
     >
-      <p>{title}</p>
+      <Box
+        sx={{
+          mb: 3,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant="h5" component="h1">
+          {title}
+        </Typography>
+      </Box>
       {todoList.map((todo) => (
         <Grid key={todo.id} container spacing={2}>
           <Grid item xs={1}>
