@@ -1,6 +1,5 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { Box, Button, TextField } from '@mui/material';
+
 import type { InputtedTodo } from 'src/types';
 
 type Props = {
@@ -9,7 +8,7 @@ type Props = {
   handleSave: () => void;
 };
 
-export const InputField = (props: Props) => {
+export const InputField: React.FC<Props> = (props: Props) => {
   const { inputtedTodo, handleInputtedTodoChange, handleSave } = props;
 
   return (
