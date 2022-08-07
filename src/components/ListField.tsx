@@ -4,7 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import type { SelectedTodo, Todo } from 'src/types';
 
 type Props = {
-  title: string;
+  areaTitle: string;
   todoList: Todo[];
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>, todoId: number) => void;
   handleEditModalOpen: (selectedTodo: SelectedTodo) => void;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const ListField = (props: Props) => {
-  const { title, todoList, handleCheckboxChange, handleEditModalOpen, handleDeleteModalOpen } =
+  const { areaTitle, todoList, handleCheckboxChange, handleEditModalOpen, handleDeleteModalOpen } =
     props;
 
   return (
@@ -26,6 +26,7 @@ export const ListField = (props: Props) => {
         borderRadius: 1,
       }}
     >
+      {/* エリアタイトル */}
       <Box
         sx={{
           mb: 3,
@@ -34,11 +35,48 @@ export const ListField = (props: Props) => {
         }}
       >
         <Typography variant="h5" component="h1">
-          {title}
+          {areaTitle}
         </Typography>
       </Box>
+
+      {/* todoがあればテーブルヘッダーを表示し、なければその旨を表示 */}
+      {todoList.length > 0 ? (
+        <Box
+          sx={{
+            mb: 1,
+            borderBottom: '1px solid #CCCCCC',
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              <Typography variant="subtitle1" component="p">
+                件名
+              </Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="subtitle1" component="p">
+                内容
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            mb: 3,
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography variant="body1" component="p">
+            {`${areaTitle}はありません`}
+          </Typography>
+        </Box>
+      )}
+
+      {/* リスト部分 */}
       {todoList.map((todo) => (
-        <Grid key={todo.id} container spacing={2}>
+        <Grid key={todo.id} container spacing={2} alignItems="center">
           <Grid item xs={1}>
             <Checkbox
               checked={todo.isCompleted}
@@ -54,13 +92,13 @@ export const ListField = (props: Props) => {
           </Grid>
           <Grid item xs={2}>
             <EditIcon
-              sx={{ cursor: 'pointer' }}
+              sx={{ cursor: 'pointer', mx: 1 }}
               onClick={() =>
                 handleEditModalOpen({ id: todo.id, title: todo.title, content: todo.content })
               }
             />
             <DeleteIcon
-              sx={{ cursor: 'pointer' }}
+              sx={{ cursor: 'pointer', mx: 1 }}
               color="disabled"
               onClick={() =>
                 handleDeleteModalOpen({ id: todo.id, title: todo.title, content: todo.content })

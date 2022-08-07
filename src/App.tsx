@@ -115,7 +115,7 @@ function App() {
       <FilterField filterValue={filterValue} setFilterValue={setFilterValue} />
       {filterValue !== 'completed' && (
         <ListField
-          title={'未完了'}
+          areaTitle={'未完了'}
           todoList={descUncompletedList}
           handleCheckboxChange={handleCheckboxChange}
           handleEditModalOpen={handleEditModalOpen}
@@ -124,7 +124,7 @@ function App() {
       )}
       {filterValue !== 'uncompleted' && (
         <ListField
-          title={'完了'}
+          areaTitle={'完了'}
           todoList={descCompletedList}
           handleCheckboxChange={handleCheckboxChange}
           handleEditModalOpen={handleEditModalOpen}

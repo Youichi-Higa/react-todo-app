@@ -49,7 +49,6 @@ export const DeleteModal: React.FC<Props> = (props: Props) => {
             label="件名"
             variant="outlined"
             disabled
-            required
             multiline
             maxRows={4}
             sx={{ width: '100%', mb: 3 }}
