@@ -59,7 +59,10 @@ function App() {
   };
   const handleEditModalClose = () => {
     setEditModalOpen(false);
-    reset();
+    reset({
+      title: '',
+      content: '',
+    });    
   };
 
   // 削除モーダルの制御

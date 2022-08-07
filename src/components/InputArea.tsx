@@ -34,12 +34,16 @@ export const InputArea: React.FC<Props> = (props: Props) => {
     };
     const newTodoList = [...todoList, newTodo];
     setTodoList(newTodoList);
+
     localStorage.setItem('todo-list', JSON.stringify(newTodoList));
 
     // 成功メッセージを表示
     handleSnackbarOpen(message.success.save);
 
-    reset();
+    reset({
+      title: '',
+      content: '',
+    });
   };
 
   return (
