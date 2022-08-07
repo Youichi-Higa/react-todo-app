@@ -17,7 +17,7 @@ function App() {
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   const useFormReturn = useForm<SelectedTodo>();
-  const { setValue } = useFormReturn;
+  const { setValue, reset } = useFormReturn;
 
   // 日付を降順にする関数
   const sortDescendingDate = (_todoList: Todo[]) => {
@@ -53,6 +53,7 @@ function App() {
   };
   const handleEditModalClose = () => {
     setEditModalOpen(false);
+    reset();
   };
 
   // 削除モーダルの制御

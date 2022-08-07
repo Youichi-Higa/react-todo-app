@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { Box, Button, TextField } from '@mui/material';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { hookFormErrorMessage } from 'src/constants';
 import type { FormTodo, Todo } from 'src/types';
 
 type Props = {
@@ -11,11 +12,14 @@ type Props = {
 export const InputField: React.FC<Props> = (props: Props) => {
   const { todoList, setTodoList } = props;
 
-  const { control, handleSubmit, reset } = useForm<FormTodo>();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm<FormTodo>();
 
   const onSubmit: SubmitHandler<FormTodo> = (data) => {
-    // TODO バリデーション
-    if (data.title === '') return;
     // ユニークIDを生成
     const id = todoList.length === 0 ? 1 : todoList[todoList.length - 1].id + 1;
     const newTodo = {
@@ -34,8 +38,6 @@ export const InputField: React.FC<Props> = (props: Props) => {
 
   return (
     <Box
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
       sx={{
         width: '700px',
         mx: 'auto',
@@ -46,40 +48,33 @@ export const InputField: React.FC<Props> = (props: Props) => {
         textAlign: 'center',
       }}
     >
-      <Controller
-        name="title"
-        control={control}
-        render={({ field }) => (
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              label="件名"
-              variant="outlined"
-              required
-              multiline
-              maxRows={4}
-              sx={{ width: '100%' }}
-              {...field}
-            />
-          </Box>
-        )}
+      <TextField
+        label="件名"
+        variant="outlined"
+        required
+        multiline
+        maxRows={4}
+        {...register('title', {
+          required: hookFormErrorMessage.required,
+          maxLength: { value: 20, message: hookFormErrorMessage.maxLength20 },
+        })}
+        error={'title' in errors}
+        helperText={errors.title?.message}
+        sx={{ width: '100%', mb: 3 }}
       />
-      <Controller
-        name="content"
-        control={control}
-        render={({ field }) => (
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              label="内容"
-              variant="outlined"
-              multiline
-              maxRows={4}
-              sx={{ width: '100%' }}
-              {...field}
-            />
-          </Box>
-        )}
+      <TextField
+        label="内容"
+        variant="outlined"
+        multiline
+        maxRows={4}
+        {...register('content', {
+          maxLength: { value: 50, message: hookFormErrorMessage.maxLength50 },
+        })}
+        error={'content' in errors}
+        helperText={errors.content?.message}
+        sx={{ width: '100%', mb: 3 }}
       />
-      <Button type="submit" variant="contained">
+      <Button type="submit" variant="contained" onClick={handleSubmit(onSubmit)}>
         保存
       </Button>
     </Box>

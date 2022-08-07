@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Controller, SubmitHandler, UseFormReturn } from 'react-hook-form';
+import { SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { hookFormErrorMessage } from 'src/constants';
 import type { SelectedTodo, Todo } from 'src/types';
 
 type Props = {
@@ -12,15 +13,14 @@ type Props = {
 };
 
 export const EditModal: React.FC<Props> = (props: Props) => {
-  const {
-    todoList,
-    setTodoList,
-    editModalOpen,
-    handleEditModalClose,
-    useFormReturn,
-  } = props;
+  const { todoList, setTodoList, editModalOpen, handleEditModalClose, useFormReturn } = props;
 
-  const { control, handleSubmit, reset } = useFormReturn;
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useFormReturn;
 
   const onSubmit: SubmitHandler<SelectedTodo> = (data) => {
     const newTodoList = [...todoList];
@@ -43,8 +43,6 @@ export const EditModal: React.FC<Props> = (props: Props) => {
         aria-describedby="modal-modal-description"
       >
         <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
           sx={{
             position: 'absolute' as 'absolute',
             top: '50%',
@@ -69,41 +67,36 @@ export const EditModal: React.FC<Props> = (props: Props) => {
               編集
             </Typography>
           </Box>
-          <Controller
-            name="title"
-            control={control}
-            render={({ field }) => (
-              <Box sx={{ mb: 3 }}>
-                <TextField
-                  label="件名"
-                  variant="outlined"
-                  required
-                  multiline
-                  maxRows={4}
-                  sx={{ width: '100%' }}
-                  {...field}
-                />
-              </Box>
-            )}
+          <TextField
+            label="件名"
+            variant="outlined"
+            required
+            multiline
+            maxRows={4}
+            {...register('title', {
+              required: hookFormErrorMessage.required,
+              maxLength: { value: 20, message: hookFormErrorMessage.maxLength20 },
+            })}
+            error={'title' in errors}
+            helperText={errors.title?.message}
+            sx={{ width: '100%', mb: 3 }}
           />
-          <Controller
-            name="content"
-            control={control}
-            render={({ field }) => (
-              <Box sx={{ mb: 5 }}>
-                <TextField
-                  label="内容"
-                  variant="outlined"
-                  multiline
-                  maxRows={4}
-                  sx={{ width: '100%' }}
-                  {...field}
-                />
-              </Box>
-            )}
+          <TextField
+            label="内容"
+            variant="outlined"
+            multiline
+            maxRows={4}
+            {...register('content', {
+              maxLength: { value: 50, message: hookFormErrorMessage.maxLength50 },
+            })}
+            error={'content' in errors}
+            helperText={errors.content?.message}
+            sx={{ width: '100%', mb: 5 }}
           />
           <input type="hidden" name="id" />
           <Button
+            variant="contained"
+            onClick={handleEditModalClose}
             sx={{
               width: 110,
               backgroundColor: 'gray',
@@ -112,13 +105,15 @@ export const EditModal: React.FC<Props> = (props: Props) => {
                 backgroundColor: 'gray',
               },
             }}
-            variant="contained"
-            disableElevation
-            onClick={handleEditModalClose}
           >
             キャンセル
           </Button>
-          <Button type="submit" sx={{ width: 110 }} variant="contained">
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={handleSubmit(onSubmit)}
+            sx={{ width: 110 }}
+          >
             更新
           </Button>
         </Box>

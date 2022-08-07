@@ -43,33 +43,29 @@ export const DeleteModal: React.FC<Props> = (props: Props) => {
               削除
             </Typography>
           </Box>
-          <Box sx={{ mb: 3 }}>
-            <TextField
-              id="title"
-              name="title"
-              label="件名"
-              variant="outlined"
-              disabled
-              required
-              multiline
-              maxRows={4}
-              sx={{ width: '100%' }}
-              value={selectedTodo.title}
-            />
-          </Box>
-          <Box sx={{ mb: 5 }}>
-            <TextField
-              id="content"
-              name="content"
-              label="内容"
-              variant="outlined"
-              disabled
-              multiline
-              maxRows={4}
-              sx={{ width: '100%' }}
-              value={selectedTodo.content}
-            />
-          </Box>
+          <TextField
+            id="title"
+            name="title"
+            label="件名"
+            variant="outlined"
+            disabled
+            required
+            multiline
+            maxRows={4}
+            sx={{ width: '100%', mb: 3 }}
+            value={selectedTodo.title}
+          />
+          <TextField
+            id="content"
+            name="content"
+            label="内容"
+            variant="outlined"
+            disabled
+            multiline
+            maxRows={4}
+            sx={{ width: '100%', mb: 5 }}
+            value={selectedTodo.content}
+          />
           <Box
             sx={{
               mb: 3,
@@ -82,6 +78,8 @@ export const DeleteModal: React.FC<Props> = (props: Props) => {
             </Typography>
           </Box>
           <Button
+            variant="contained"
+            onClick={handleDeleteModalClose}
             sx={{
               width: 110,
               backgroundColor: 'gray',
@@ -90,13 +88,10 @@ export const DeleteModal: React.FC<Props> = (props: Props) => {
                 backgroundColor: 'gray',
               },
             }}
-            variant="contained"
-            disableElevation
-            onClick={handleDeleteModalClose}
           >
             キャンセル
           </Button>
-          <Button sx={{ width: 110 }} variant="contained" color="error" onClick={handleDelete}>
+          <Button variant="contained" color="error" onClick={handleDelete} sx={{ width: 110 }}>
             削除
           </Button>
         </Box>
