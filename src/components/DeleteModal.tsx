@@ -1,4 +1,4 @@
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, Modal, Typography } from '@mui/material';
 import type { SelectedTodo } from 'src/types';
 
 type Props = {
@@ -29,7 +29,6 @@ export const DeleteModal: React.FC<Props> = (props: Props) => {
             borderRadius: 4,
             boxShadow: 24,
             p: 4,
-            textAlign: 'center',
           }}
         >
           <Box
@@ -43,28 +42,44 @@ export const DeleteModal: React.FC<Props> = (props: Props) => {
               削除
             </Typography>
           </Box>
-          <TextField
-            id="title"
-            name="title"
-            label="件名"
-            variant="outlined"
-            disabled
-            multiline
-            maxRows={4}
-            sx={{ width: '100%', mb: 3 }}
-            value={selectedTodo.title}
-          />
-          <TextField
-            id="content"
-            name="content"
-            label="内容"
-            variant="outlined"
-            disabled
-            multiline
-            maxRows={4}
-            sx={{ width: '100%', mb: 5 }}
-            value={selectedTodo.content}
-          />
+
+          <Grid
+            container
+            sx={{
+              mb: 1,
+              borderBottom: '1px solid #a9a9a9',
+            }}
+          >
+            <Grid item xs={4}>
+              <Typography variant="subtitle1" component="p">
+                件名
+              </Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="subtitle1" component="p">
+                内容
+              </Typography>
+            </Grid>
+          </Grid>
+
+          <Grid
+            container
+            sx={{
+              mb: 8,
+            }}
+          >
+            <Grid item xs={4}>
+              <Typography variant="subtitle1" component="p">
+                {selectedTodo.title}
+              </Typography>
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="subtitle1" component="p">
+                {selectedTodo.content}
+              </Typography>
+            </Grid>
+          </Grid>
+
           <Box
             sx={{
               mb: 3,
@@ -76,23 +91,30 @@ export const DeleteModal: React.FC<Props> = (props: Props) => {
               本当に削除しますか？
             </Typography>
           </Box>
-          <Button
-            variant="contained"
-            onClick={handleDeleteModalClose}
+          <Box
             sx={{
-              width: 110,
-              backgroundColor: 'gray',
-              mr: 4,
-              '&:hover': {
-                backgroundColor: 'gray',
-              },
+              display: 'flex',
+              justifyContent: 'center',
             }}
           >
-            キャンセル
-          </Button>
-          <Button variant="contained" color="error" onClick={handleDelete} sx={{ width: 110 }}>
-            削除
-          </Button>
+            <Button
+              variant="contained"
+              onClick={handleDeleteModalClose}
+              sx={{
+                width: 110,
+                backgroundColor: 'gray',
+                mr: 4,
+                '&:hover': {
+                  backgroundColor: 'gray',
+                },
+              }}
+            >
+              キャンセル
+            </Button>
+            <Button variant="contained" color="error" onClick={handleDelete} sx={{ width: 110 }}>
+              削除
+            </Button>
+          </Box>
         </Box>
       </Modal>
     </div>
