@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Alert, Snackbar } from '@mui/material';
-import { DeleteModal, EditModal, FilterField, InputField, ListField } from 'src/components';
+import { Alert, Box, Snackbar, Typography } from '@mui/material';
+import { DeleteModal, EditModal, FilterArea, InputArea, ListArea } from 'src/components';
 import { message } from 'src/constants';
 import type { FilterValue, SelectedTodo, Todo } from 'src/types';
 
@@ -23,7 +23,7 @@ function App() {
   const useFormReturn = useForm<SelectedTodo>();
   const { setValue, reset } = useFormReturn;
 
-  // 日付を降順にする関数
+  // 日時を降順にする関数
   const sortDescendingDate = (_todoList: Todo[]) => {
     _todoList.sort((a, b) => {
       const aDate = a.updatedAt === null ? a.createdAt : a.updatedAt;
@@ -107,14 +107,32 @@ function App() {
 
   return (
     <>
-      <InputField
+      {/* アプリ名 */}
+      <Box
+        sx={{
+          m: 2,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Typography variant="h4" component="h1">
+          TODO App
+        </Typography>
+      </Box>
+
+      {/* 入力エリア */}
+      <InputArea
         todoList={todoList}
         setTodoList={setTodoList}
         handleSnackbarOpen={handleSnackbarOpen}
       />
-      <FilterField filterValue={filterValue} setFilterValue={setFilterValue} />
+
+      {/* フィルターエリア */}
+      <FilterArea filterValue={filterValue} setFilterValue={setFilterValue} />
+
+      {/* 完了エリア */}
       {filterValue !== 'completed' && (
-        <ListField
+        <ListArea
           areaTitle={'未完了'}
           todoList={descUncompletedList}
           handleCheckboxChange={handleCheckboxChange}
@@ -122,8 +140,9 @@ function App() {
           handleDeleteModalOpen={handleDeleteModalOpen}
         />
       )}
+      {/* 未完了エリア */}
       {filterValue !== 'uncompleted' && (
-        <ListField
+        <ListArea
           areaTitle={'完了'}
           todoList={descCompletedList}
           handleCheckboxChange={handleCheckboxChange}

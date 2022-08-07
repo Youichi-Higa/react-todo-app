@@ -10,7 +10,7 @@ type Props = {
   handleSnackbarOpen: (_message: string) => void;
 };
 
-export const InputField: React.FC<Props> = (props: Props) => {
+export const InputArea: React.FC<Props> = (props: Props) => {
   const { todoList, setTodoList, handleSnackbarOpen } = props;
 
   const {
@@ -38,7 +38,7 @@ export const InputField: React.FC<Props> = (props: Props) => {
 
     // 成功メッセージを表示
     handleSnackbarOpen(message.success.save);
-    
+
     reset();
   };
 
@@ -47,11 +47,12 @@ export const InputField: React.FC<Props> = (props: Props) => {
       sx={{
         width: '700px',
         mx: 'auto',
-        my: 2,
+        my: 3,
         p: 3,
         boxShadow: 3,
-        borderRadius: 1,
+        borderRadius: 4,
         textAlign: 'center',
+        bgcolor: 'background.paper',
       }}
     >
       <TextField
