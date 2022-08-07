@@ -1,1 +1,1 @@
-export * from "./hookFormErrorMessage"
+export * from "./message"

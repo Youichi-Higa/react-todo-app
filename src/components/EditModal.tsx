@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { SubmitHandler, UseFormReturn } from 'react-hook-form';
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
-import { hookFormErrorMessage } from 'src/constants';
+import { message } from 'src/constants';
 import type { SelectedTodo, Todo } from 'src/types';
 
 type Props = {
@@ -9,11 +9,19 @@ type Props = {
   setTodoList: Dispatch<SetStateAction<Todo[]>>;
   editModalOpen: boolean;
   handleEditModalClose: () => void;
+  handleSnackbarOpen: (_message: string) => void;
   useFormReturn: UseFormReturn<SelectedTodo>;
 };
 
 export const EditModal: React.FC<Props> = (props: Props) => {
-  const { todoList, setTodoList, editModalOpen, handleEditModalClose, useFormReturn } = props;
+  const {
+    todoList,
+    setTodoList,
+    editModalOpen,
+    handleEditModalClose,
+    handleSnackbarOpen,
+    useFormReturn,
+  } = props;
 
   const {
     register,
@@ -24,12 +32,17 @@ export const EditModal: React.FC<Props> = (props: Props) => {
 
   const onSubmit: SubmitHandler<SelectedTodo> = (data) => {
     const newTodoList = [...todoList];
+    // 編集するtodoのindexを取得してtodoListを更新し、ローカルストレージに保存
     const index = newTodoList.findIndex((todo) => todo.id === data.id);
     newTodoList[index].title = data.title;
     newTodoList[index].content = data.content;
     newTodoList[index].updatedAt = new Date().toISOString();
-    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
     setTodoList(newTodoList);
+    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
+    
+    // 成功メッセージを表示
+    handleSnackbarOpen(message.success.update);
+
     handleEditModalClose();
     reset();
   };
@@ -74,8 +87,8 @@ export const EditModal: React.FC<Props> = (props: Props) => {
             multiline
             maxRows={4}
             {...register('title', {
-              required: hookFormErrorMessage.required,
-              maxLength: { value: 20, message: hookFormErrorMessage.maxLength20 },
+              required: message.hookFormError.required,
+              maxLength: { value: 20, message: message.hookFormError.maxLength20 },
             })}
             error={'title' in errors}
             helperText={errors.title?.message}
@@ -87,7 +100,7 @@ export const EditModal: React.FC<Props> = (props: Props) => {
             multiline
             maxRows={4}
             {...register('content', {
-              maxLength: { value: 50, message: hookFormErrorMessage.maxLength50 },
+              maxLength: { value: 50, message: message.hookFormError.maxLength50 },
             })}
             error={'content' in errors}
             helperText={errors.content?.message}

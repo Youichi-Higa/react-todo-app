@@ -1,16 +1,17 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Box, Button, TextField } from '@mui/material';
-import { hookFormErrorMessage } from 'src/constants';
+import { message } from 'src/constants';
 import type { FormTodo, Todo } from 'src/types';
 
 type Props = {
   todoList: Todo[];
   setTodoList: Dispatch<SetStateAction<Todo[]>>;
+  handleSnackbarOpen: (_message: string) => void;
 };
 
 export const InputField: React.FC<Props> = (props: Props) => {
-  const { todoList, setTodoList } = props;
+  const { todoList, setTodoList, handleSnackbarOpen } = props;
 
   const {
     register,
@@ -22,6 +23,7 @@ export const InputField: React.FC<Props> = (props: Props) => {
   const onSubmit: SubmitHandler<FormTodo> = (data) => {
     // ユニークIDを生成
     const id = todoList.length === 0 ? 1 : todoList[todoList.length - 1].id + 1;
+    // newTodoをtodoListに追加して更新し、ローカルストレージに保存
     const newTodo = {
       id,
       title: data.title,
@@ -31,8 +33,12 @@ export const InputField: React.FC<Props> = (props: Props) => {
       updatedAt: null,
     };
     const newTodoList = [...todoList, newTodo];
-    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
     setTodoList(newTodoList);
+    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
+
+    // 成功メッセージを表示
+    handleSnackbarOpen(message.success.save);
+    
     reset();
   };
 
@@ -55,8 +61,8 @@ export const InputField: React.FC<Props> = (props: Props) => {
         multiline
         maxRows={4}
         {...register('title', {
-          required: hookFormErrorMessage.required,
-          maxLength: { value: 20, message: hookFormErrorMessage.maxLength20 },
+          required: message.hookFormError.required,
+          maxLength: { value: 20, message: message.hookFormError.maxLength20 },
         })}
         error={'title' in errors}
         helperText={errors.title?.message}
@@ -68,7 +74,7 @@ export const InputField: React.FC<Props> = (props: Props) => {
         multiline
         maxRows={4}
         {...register('content', {
-          maxLength: { value: 50, message: hookFormErrorMessage.maxLength50 },
+          maxLength: { value: 50, message: message.hookFormError.maxLength50 },
         })}
         error={'content' in errors}
         helperText={errors.content?.message}

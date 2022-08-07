@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Alert, Snackbar } from '@mui/material';
 import { DeleteModal, EditModal, FilterField, InputField, ListField } from 'src/components';
+import { message } from 'src/constants';
 import type { FilterValue, SelectedTodo, Todo } from 'src/types';
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
   const [filterValue, setFilterValue] = useState<FilterValue>('all');
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>('');
 
   const useFormReturn = useForm<SelectedTodo>();
   const { setValue, reset } = useFormReturn;
@@ -36,19 +40,21 @@ function App() {
   // チェックボックスの変更を制御
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, todoId: number) => {
     const newTodoList = [...todoList];
+    // クリックされたtodoのindexを取得してtodoListを更新し、ローカルストレージに保存
     const index = newTodoList.findIndex((todo) => todo.id === todoId);
     newTodoList[index].isCompleted = e.target.checked;
     newTodoList[index].updatedAt = new Date().toISOString();
-    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
     setTodoList(newTodoList);
+    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
   };
 
   // 編集モーダルの制御
   const handleEditModalOpen = (_selectedTodo: SelectedTodo) => {
-    setSelectedTodo(_selectedTodo);
+    // フォームに値をセット
     setValue('id', _selectedTodo.id);
     setValue('title', _selectedTodo.title);
     setValue('content', _selectedTodo.content);
+
     setEditModalOpen(true);
   };
   const handleEditModalClose = () => {
@@ -67,10 +73,28 @@ function App() {
 
   // 削除
   const handleDelete = () => {
+    // 選択されたtodoを削除してtodoListを更新し、ローカルストレージに保存
     const newTodoList = todoList.filter((todo) => todo.id !== selectedTodo.id);
-    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
     setTodoList(newTodoList);
+    localStorage.setItem('todo-list', JSON.stringify(newTodoList));
+
+    // 成功メッセージを表示
+    handleSnackbarOpen(message.success.delete);
+
     setDeleteModalOpen(false);
+  };
+
+  // 成功メッセージの制御
+  const handleSnackbarOpen = (_message: string) => {
+    setSnackbarMessage(_message);
+    setSnackbarOpen(true);
+  };
+  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
   };
 
   // 初回レンダリング時にローカルストレージからデータ取得
@@ -83,7 +107,11 @@ function App() {
 
   return (
     <>
-      <InputField todoList={todoList} setTodoList={setTodoList} />
+      <InputField
+        todoList={todoList}
+        setTodoList={setTodoList}
+        handleSnackbarOpen={handleSnackbarOpen}
+      />
       <FilterField filterValue={filterValue} setFilterValue={setFilterValue} />
       {filterValue !== 'completed' && (
         <ListField
@@ -110,6 +138,7 @@ function App() {
         setTodoList={setTodoList}
         editModalOpen={editModalOpen}
         handleEditModalClose={handleEditModalClose}
+        handleSnackbarOpen={handleSnackbarOpen}
         useFormReturn={useFormReturn}
       />
       <DeleteModal
@@ -118,6 +147,23 @@ function App() {
         handleDeleteModalClose={handleDeleteModalClose}
         handleDelete={handleDelete}
       />
+
+      {/* 成功メッセージ */}
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          variant="filled"
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
