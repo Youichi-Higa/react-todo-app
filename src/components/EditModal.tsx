@@ -85,7 +85,8 @@ export const EditModal: React.FC<Props> = (props: Props) => {
             variant="outlined"
             required
             multiline
-            maxRows={4}
+            maxRows={2}
+            placeholder="20文字以内"
             {...register('title', {
               required: message.hookFormError.required,
               maxLength: { value: 20, message: message.hookFormError.maxLength20 },
@@ -99,8 +100,9 @@ export const EditModal: React.FC<Props> = (props: Props) => {
             variant="outlined"
             multiline
             maxRows={4}
+            placeholder="100文字以内"
             {...register('content', {
-              maxLength: { value: 50, message: message.hookFormError.maxLength50 },
+              maxLength: { value: 100, message: message.hookFormError.maxLength100 },
             })}
             error={'content' in errors}
             helperText={errors.content?.message}

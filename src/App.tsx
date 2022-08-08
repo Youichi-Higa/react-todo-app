@@ -9,6 +9,11 @@ function App() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const uncompletedList = todoList.filter((todo) => !todo.isCompleted);
   const completedList = todoList.filter((todo) => todo.isCompleted);
+  const todoCounts = {
+    allTodo: todoList.length,
+    uncompletedTodo: uncompletedList.length,
+    completedTodo: completedList.length,
+  };
   const [selectedTodo, setSelectedTodo] = useState<SelectedTodo>({
     id: undefined,
     title: '',
@@ -62,7 +67,7 @@ function App() {
     reset({
       title: '',
       content: '',
-    });    
+    });
   };
 
   // 削除モーダルの制御
@@ -131,7 +136,7 @@ function App() {
       />
 
       {/* フィルターエリア */}
-      <FilterArea filterValue={filterValue} setFilterValue={setFilterValue} />
+      <FilterArea filterValue={filterValue} setFilterValue={setFilterValue} todoCounts={todoCounts} />
 
       {/* 完了エリア */}
       {filterValue !== 'completed' && (
