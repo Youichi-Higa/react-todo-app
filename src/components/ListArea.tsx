@@ -21,8 +21,8 @@ export const ListArea = (props: Props) => {
   return (
     <Box
       sx={{
-        width: '42%',
-        height: '50vh',
+        width: '700px',
+        height: '450px',
         mx: 3,
         my: 2,
         p: 3,
@@ -79,7 +79,7 @@ export const ListArea = (props: Props) => {
         </Box>
       )}
 
-      <Box sx={{ height: '35vh', overflow: 'auto' }}>
+      <Box sx={{ height: '300px', overflow: 'auto' }}>
         {/* リスト部分 */}
         {todoList.map((todo) => (
           <Grid key={todo.id} container spacing={2} alignItems="center">
@@ -121,4 +121,4 @@ export const ListArea = (props: Props) => {
       </Box>
     </Box>
   );
-};;
+};

@@ -49,7 +49,7 @@ export const InputArea: React.FC<Props> = (props: Props) => {
   return (
     <Box
       sx={{
-        width: '42%',
+        width: '700px',
         mx: 'auto',
         my: 4,
         p: 3,

@@ -16,7 +16,7 @@ export const FilterArea = (props: Props) => {
   };
 
   return (
-    <Box sx={{ width: '42%', mx: 'auto' }}>
+    <Box sx={{ width: '700px', mx: 'auto' }}>
       <Tabs value={filterValue} onChange={handleChange} centered>
         <Tab label={`全て(${todoCounts.allTodo}件)`} value="all" sx={{ fontSize: 16 }} />
         <Tab
