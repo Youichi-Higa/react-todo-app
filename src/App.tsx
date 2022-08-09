@@ -136,28 +136,34 @@ function App() {
       />
 
       {/* フィルターエリア */}
-      <FilterArea filterValue={filterValue} setFilterValue={setFilterValue} todoCounts={todoCounts} />
+      <FilterArea
+        filterValue={filterValue}
+        setFilterValue={setFilterValue}
+        todoCounts={todoCounts}
+      />
 
-      {/* 完了エリア */}
-      {filterValue !== 'completed' && (
-        <ListArea
-          areaTitle={'未完了'}
-          todoList={descUncompletedList}
-          handleCheckboxChange={handleCheckboxChange}
-          handleEditModalOpen={handleEditModalOpen}
-          handleDeleteModalOpen={handleDeleteModalOpen}
-        />
-      )}
-      {/* 未完了エリア */}
-      {filterValue !== 'uncompleted' && (
-        <ListArea
-          areaTitle={'完了'}
-          todoList={descCompletedList}
-          handleCheckboxChange={handleCheckboxChange}
-          handleEditModalOpen={handleEditModalOpen}
-          handleDeleteModalOpen={handleDeleteModalOpen}
-        />
-      )}
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        {/* 完了エリア */}
+        {filterValue !== 'completed' && (
+          <ListArea
+            areaTitle={'未完了'}
+            todoList={descUncompletedList}
+            handleCheckboxChange={handleCheckboxChange}
+            handleEditModalOpen={handleEditModalOpen}
+            handleDeleteModalOpen={handleDeleteModalOpen}
+          />
+        )}
+        {/* 未完了エリア */}
+        {filterValue !== 'uncompleted' && (
+          <ListArea
+            areaTitle={'完了'}
+            todoList={descCompletedList}
+            handleCheckboxChange={handleCheckboxChange}
+            handleEditModalOpen={handleEditModalOpen}
+            handleDeleteModalOpen={handleDeleteModalOpen}
+          />
+        )}
+      </Box>
 
       {/* モーダル */}
       <EditModal

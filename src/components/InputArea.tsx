@@ -49,9 +49,9 @@ export const InputArea: React.FC<Props> = (props: Props) => {
   return (
     <Box
       sx={{
-        width: '700px',
+        width: '42%',
         mx: 'auto',
-        my: 3,
+        my: 4,
         p: 3,
         boxShadow: 3,
         borderRadius: 4,
@@ -72,7 +72,7 @@ export const InputArea: React.FC<Props> = (props: Props) => {
         })}
         error={'title' in errors}
         helperText={errors.title?.message}
-        sx={{ width: '100%', mb: 3 }}
+        sx={{ width: '100%', mb: 2 }}
       />
       <TextField
         label="内容"
@@ -85,7 +85,7 @@ export const InputArea: React.FC<Props> = (props: Props) => {
         })}
         error={'content' in errors}
         helperText={errors.content?.message}
-        sx={{ width: '100%', mb: 3 }}
+        sx={{ width: '100%', mb: 2 }}
       />
       <Button type="submit" variant="contained" onClick={handleSubmit(onSubmit)}>
         保存

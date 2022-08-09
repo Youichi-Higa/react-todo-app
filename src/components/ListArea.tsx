@@ -21,10 +21,10 @@ export const ListArea = (props: Props) => {
   return (
     <Box
       sx={{
-        width: '700px',
-        mx: 'auto',
-        mt: 2,
-        mb: 4,
+        width: '42%',
+        height: '50vh',
+        mx: 3,
+        my: 2,
         p: 3,
         boxShadow: 3,
         borderRadius: 4,
@@ -79,44 +79,46 @@ export const ListArea = (props: Props) => {
         </Box>
       )}
 
-      {/* リスト部分 */}
-      {todoList.map((todo) => (
-        <Grid key={todo.id} container spacing={2} alignItems="center">
-          <Grid item xs={1}>
-            <Tooltip title={checkboxTooltip} placement="left" arrow>
-              <Checkbox
-                checked={todo.isCompleted}
-                onChange={(e) => handleCheckboxChange(e, todo.id)}
-                inputProps={{ 'aria-label': 'controlled' }}
-              />
-            </Tooltip>
+      <Box sx={{ height: '35vh', overflow: 'auto' }}>
+        {/* リスト部分 */}
+        {todoList.map((todo) => (
+          <Grid key={todo.id} container spacing={2} alignItems="center">
+            <Grid item xs={1}>
+              <Tooltip title={checkboxTooltip} placement="left" arrow>
+                <Checkbox
+                  checked={todo.isCompleted}
+                  onChange={(e) => handleCheckboxChange(e, todo.id)}
+                  inputProps={{ 'aria-label': 'controlled' }}
+                />
+              </Tooltip>
+            </Grid>
+            <Grid item xs={3}>
+              <Box>{todo.title}</Box>
+            </Grid>
+            <Grid item xs={6}>
+              <Box>{todo.content}</Box>
+            </Grid>
+            <Grid item xs={2}>
+              <Tooltip title="編集" placement="left" arrow>
+                <EditIcon
+                  sx={{ cursor: 'pointer', mx: 1, color: '#696969' }}
+                  onClick={() =>
+                    handleEditModalOpen({ id: todo.id, title: todo.title, content: todo.content })
+                  }
+                />
+              </Tooltip>
+              <Tooltip title="削除" placement="right" arrow>
+                <DeleteIcon
+                  sx={{ cursor: 'pointer', mx: 1, color: '#696969' }}
+                  onClick={() =>
+                    handleDeleteModalOpen({ id: todo.id, title: todo.title, content: todo.content })
+                  }
+                />
+              </Tooltip>
+            </Grid>
           </Grid>
-          <Grid item xs={3}>
-            <Box>{todo.title}</Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Box>{todo.content}</Box>
-          </Grid>
-          <Grid item xs={2}>
-            <Tooltip title="編集" placement="left" arrow>
-              <EditIcon
-                sx={{ cursor: 'pointer', mx: 1, color: '#696969' }}
-                onClick={() =>
-                  handleEditModalOpen({ id: todo.id, title: todo.title, content: todo.content })
-                }
-              />
-            </Tooltip>
-            <Tooltip title="削除" placement="right" arrow>
-              <DeleteIcon
-                sx={{ cursor: 'pointer', mx: 1, color: '#696969' }}
-                onClick={() =>
-                  handleDeleteModalOpen({ id: todo.id, title: todo.title, content: todo.content })
-                }
-              />
-            </Tooltip>
-          </Grid>
-        </Grid>
-      ))}
+        ))}
+      </Box>
     </Box>
   );
 };;

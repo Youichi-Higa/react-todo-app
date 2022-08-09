@@ -16,7 +16,7 @@ export const FilterArea = (props: Props) => {
   };
 
   return (
-    <Box sx={{ width: '700px', mx: 'auto' }}>
+    <Box sx={{ width: '42%', mx: 'auto' }}>
       <Tabs value={filterValue} onChange={handleChange} centered>
         <Tab label={`全て(${todoCounts.allTodo}件)`} value="all" sx={{ fontSize: 16 }} />
         <Tab
@@ -24,7 +24,11 @@ export const FilterArea = (props: Props) => {
           value="uncompleted"
           sx={{ fontSize: 16 }}
         />
-        <Tab label={`完了(${todoCounts.completedTodo}件)`} value="completed" sx={{ fontSize: 16 }} />
+        <Tab
+          label={`完了(${todoCounts.completedTodo}件)`}
+          value="completed"
+          sx={{ fontSize: 16 }}
+        />
       </Tabs>
     </Box>
   );
