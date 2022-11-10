@@ -22,7 +22,6 @@ export const ListArea = (props: Props) => {
     <Box
       sx={{
         width: '42%',
-        height: '50vh',
         mx: 3,
         my: 2,
         p: 3,
