@@ -21,8 +21,8 @@ export const ListArea = (props: Props) => {
   return (
     <Box
       sx={{
-        width: '700px',
-        height: '450px',
+        width: '42%',
+        height: '50vh',
         mx: 3,
         my: 2,
         p: 3,
@@ -101,7 +101,7 @@ export const ListArea = (props: Props) => {
             <Grid item xs={2}>
               <Tooltip title="編集" placement="left" arrow>
                 <EditIcon
-                  sx={{ cursor: 'pointer', mx: 1, color: '#696969' }}
+                  sx={{ cursor: 'pointer', ml: 1, color: '#696969' }}
                   onClick={() =>
                     handleEditModalOpen({ id: todo.id, title: todo.title, content: todo.content })
                   }
@@ -109,7 +109,7 @@ export const ListArea = (props: Props) => {
               </Tooltip>
               <Tooltip title="削除" placement="right" arrow>
                 <DeleteIcon
-                  sx={{ cursor: 'pointer', mx: 1, color: '#696969' }}
+                  sx={{ cursor: 'pointer', ml: 1, color: '#696969' }}
                   onClick={() =>
                     handleDeleteModalOpen({ id: todo.id, title: todo.title, content: todo.content })
                   }
